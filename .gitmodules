@@ -1,0 +1,3 @@
+[submodule "nui"]
+	path = nui
+	url = https://github.com/npm-run-monkey/nrm-peek-nui.git
