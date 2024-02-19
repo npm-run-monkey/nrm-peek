@@ -1,0 +1,4 @@
+node_modules
+bin
+fxmanifest.lua
+.yarn.installed
