@@ -6,7 +6,7 @@ function GetForwardVector(rotation)
 end
 
 function RayCast(origin, target, options, ignoreEntity, radius)
-	local handle = StartExpensiveSynchronousShapeTestLosProbe(origin.x, origin.y, origin.z, target.x, target.y, target.z, 8, 0, 0)
+	local handle = StartExpensiveSynchronousShapeTestLosProbe(origin.x, origin.y, origin.z, target.x, target.y, target.z, -1, 0, 0)
 	return GetShapeTestResult(handle)
 end
 
@@ -28,7 +28,7 @@ function GetTargetCoords()
 		end
 	end
 
-    --print(TargetCoords, Entity)
+    ----print(TargetCoords, Entity)
 	return TargetCoords, Entity
 end
 
@@ -47,9 +47,10 @@ RegisterNUICallback('hidePeek', function()
 end)
 
 RegisterNUICallback('triggerEvent', function(data, cb)
+    local _data = json.decode(data)
     openPeekUI(false)
     SetNuiFocus(false, false)
-    TriggerEvent(data);
+    TriggerEvent(_data.event, NetworkGetEntityFromNetworkId(_data.entity));
     openPeek = false
     clicked = false
 end)
@@ -57,14 +58,22 @@ end)
 RegisterCommand('coords', function()
     local ped = GetPlayerPed(-1)
     local coords = GetEntityCoords(ped)
+    local heading = GetEntityHeading(ped)
 
-    print(coords.x, coords.y, coords.z)
+    --print(coords.x, coords.y, coords.z, heading)
 end)
 
 RegisterNetEvent('nrm-peek:server:client:triggerEvent')
 
-AddEventHandler('nrm-peek:server:client:triggerEvent', function(event)
-    SendReactMessage('entryData', json.encode({ entry = { name = "Kleding Winkel", event = event } }));
+AddEventHandler('nrm-peek:server:client:triggerEvent', function(entries, entity)
+    local _entries = json.decode(entries)
+
+    for k,v in pairs(_entries) do
+        --print(v.name, v.event)
+        SendReactMessage('entryData', json.encode({ entry = { name = v.name, event = v.event, entity = entity } }));
+    end
+
+    --
 end)
 
 RegisterCommand('peek', function()
