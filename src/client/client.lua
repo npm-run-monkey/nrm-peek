@@ -68,6 +68,8 @@ RegisterNetEvent('nrm-peek:server:client:triggerEvent')
 AddEventHandler('nrm-peek:server:client:triggerEvent', function(entries, entity)
     local _entries = json.decode(entries)
 
+    SetNuiFocus(true, true);
+
     for k,v in pairs(_entries) do
         --print(v.name, v.event)
         SendReactMessage('entryData', json.encode({ entry = { name = v.name, event = v.event, entity = entity } }));
@@ -89,7 +91,7 @@ RegisterCommand('peek', function()
 
             if (Entity > 0) then
                 clicked = true
-                SetNuiFocus(true, true)
+                --SetNuiFocus(true, true)
 
                 NetworkRegisterEntityAsNetworked(Entity)
                 TriggerServerEvent('nrm-peek:client:server:foundEntity', NetworkGetNetworkIdFromEntity(Entity));
