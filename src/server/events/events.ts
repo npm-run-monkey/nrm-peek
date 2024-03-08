@@ -14,6 +14,6 @@ onNet('nrm-peek:client:server:foundEntity', async (entity: number) =>
     }
     catch(e)
     {
-        console.log(e)
+        //console.log(e)
     }
 });
